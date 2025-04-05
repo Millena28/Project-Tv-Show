@@ -1,3 +1,103 @@
-#root {
+/* #root {
   color: red;
+} */
+
+ /*  Page Styling */
+ body {
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  color: #000;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
 }
+
+/* Container for Episodes */
+#root {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Individual Episode Card */
+.episode-card {
+  border: 2px solid black;
+  padding: 10px;
+  background-color: #fff;
+  text-align: center;
+}
+
+/* Image Styling */
+.episode-card img {
+  width: 100%;
+  height: auto;
+  border: 3px solid black;
+}
+
+/* Title Styling */
+.episode-card h3 {
+  color: rgb(160, 36, 243);
+  font-size: 25px;
+  margin: 10px 0;
+}
+
+/* Summary Styling */
+.episode-card p {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Link Styling */
+.episode-card a {
+  display: block;
+  margin-top: 10px;
+  color: blue;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.episode-card a:hover {
+  text-decoration: underline;
+}
+
+/* Nav Bar */
+#nav-bar{
+  width: 100%;
+  background-color: #333;
+  height: auto;
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+#seachInput{
+  border: none;
+  border-radius: 15px;
+  width: 150px;
+  padding: 10px;
+  margin:  20px;
+  box-shadow: 0 0 20px 0 wheat;
+}
+#dropdown{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 25px;
+  box-shadow: 0 0 20px 0 wheat;
+  margin: 10px;
+}
+
+#episodes-dropdown{
+  padding: 5px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px 0 wheat;
+  margin:5px;
+  width: 150px
+} 

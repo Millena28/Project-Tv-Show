@@ -1,21 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+  <head><script type="text/javascript" src="/___vscode_livepreview_injected_script"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TV Show Project | Millena Mesfin (Millena28)</title>
+    <title>TV Show Project | My Name (My GitHub username)</title>
     <link href="style.css" rel="stylesheet" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
 
   <body>
+    <div id="nav-bar">
+      <div id="dropdown">
+        <label for="episodes-dropdown">Episodes</label>
+        <select id="episodes-dropdown">
+        </select> 
+      </div>
+      <div id="search">
+        <input id="seachInput" type="text" placeholder="Search episodes" />
+      </div>
+    </div>
     <div id="root">
     </div>
 
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
-    <script src="episodes.js"></script>
+   
+    <!-- <script type="module">
+      // This line is unnecessary as the function is already imported in the HTML file. Uncomment it if you want to use it again.
+      // import { getAllEpisodes } from "./episodes.js";
+    </script> -->
 
     <!-- Loads YOUR javascript code -->
-    <script src="script.js"></script>
+    <script defer type = "module" src="script.js"></script>
   </body>
 </html>
