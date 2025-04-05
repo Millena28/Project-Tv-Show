@@ -79,9 +79,8 @@ function render(episodeList) {
       episode.name.toLowerCase().includes(state.searchTerm) ||
       episode.summary.toLowerCase().includes(state.searchTerm) ||
       episode.season.toString().includes(state.searchTerm) ||
-      episode.number.toString().includes(state.searchTerm) ||
-      // MILLENA : I added this line to filter by episode ID, If you find it confusing or useless, you can remove it.
-      episode.id.toString().includes(state.searchTerm)
+      episode.number.toString().includes(state.searchTerm)
+      
     );
   });
 
