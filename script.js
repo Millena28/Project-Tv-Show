@@ -1,20 +1,21 @@
 //You can edit ALL of the code here
 import { getAllEpisodes } from "./episodes.js";
-function setup() {
+
+ function setup() {
   const allEpisodes = getAllEpisodes();
   makePageForEpisodes(allEpisodes);
   displayEpisodes(allEpisodes); 
 
 
-function makePageForEpisodes(episodeList) {
+ function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
   rootElem.textContent = `Got ${episodeList.length} episode(s)`;
 }
-function createEpisodeNumber(num) {
+ function createEpisodeNumber(num) {
   return num.toString().padStart(2, "0");
 }
 
-function displayEpisodes(episodes) {
+ function displayEpisodes(episodes) {
  // console.log("AM here testing");
  const container = document.getElementById("root");
  container.innerHTML = ""; // Clear any previous content
