@@ -2,9 +2,8 @@
 
 //This content is from https://www.tvmaze.com/
 //specifically: https://api.tvmaze.com/shows/82/episodes
-
-  export function getOneEpisode() {
-  return {
+export function getOneEpisode() {
+ return {
     id: 4952,
     url:
       "http://www.tvmaze.com/episodes/4952/game-of-thrones-1x01-winter-is-coming",
@@ -32,6 +31,7 @@
 }
 
 export function getAllEpisodes() {
+
   return [
     {
       id: 4952,
