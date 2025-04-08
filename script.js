@@ -96,6 +96,7 @@ function howManyEpisodes(episodes) {
    ? `${episodes.length} episode was found`
    : `${episodes.length} episodes found`;
 }
+ 
 //Search event listener 
  const searchInput = document.getElementById("seachInput");
   searchInput.addEventListener("keyup", search
@@ -133,4 +134,7 @@ function howManyEpisodes(episodes) {
     
   });
 
+ 
+  
+ 
 window.onload = setup;
