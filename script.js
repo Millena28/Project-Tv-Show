@@ -1,8 +1,44 @@
 //You can edit ALL of the code here
 const state = {
   allEpisodes: [],
-  searchTerm: ""
+  searchTerm: "",
+  allTvShows:[]
 };
+
+
+//fetch series dropdown
+const allTvShowEndpoint = "https://api.tvmaze.com/shows"
+const fetchTvShows = async () => {
+  try {
+    const response = await fetch(allTvShowEndpoint);
+    if (!response.ok) {
+      throw new Error("Error: " + response.status + " - " + response.statusText);
+    }
+    const data = await response.json();
+    state.allTvShows = data;
+    populateTvShowsDropdown(state.allTvShows);
+  } catch (error) {
+    console.error("Error fetching TV shows:", error);
+  }
+}
+
+
+function allTVShowsDropdown(allEpisodes) {
+  const select = document.getElementById("episodes-dropdown");
+  select.innerHTML = ""; // Clear the existing dropdown options
+  
+  const option = document.createElement("option");
+  option.value = "all";
+  option.textContent = "All Episodes";
+  select.appendChild(option);
+
+  allEpisodes.forEach(episode => {
+    const option = document.createElement("option");
+    option.value = episode.id;
+    option.textContent = `S${createEpisodeNumber(episode.season)}E${createEpisodeNumber(episode.number)} - ${episode.name}`;
+    select.appendChild(option);
+  });
+}
 
 // Fetch episodes from API
 async function fetchEpisodes() {
@@ -14,16 +50,18 @@ async function fetchEpisodes() {
 }
 
 // Setup function to call fetch and render episodes
+const searchInput = document.getElementById("searchInput");
+const tvShowSelect = document.querySelector('#tv-show-dropdown');
+const select = document.getElementById("episodes-dropdown");
 async function setup() {
+  fetchTvShows();
   try {
-    const episodes = await fetchEpisodes();
-    state.allEpisodes = episodes;
-    const searchInput = document.getElementById("searchInput");
-    const select = document.getElementById("episodes-dropdown");
     
     // Add event listeners after episodes are loaded
+    select.addEventListener("change", episodeDropdownChange);
     searchInput.addEventListener("keyup", search);
-    select.addEventListener("change", dropdownChange);
+    const episodes = await fetchEpisodes();
+    state.allEpisodes = episodes;
   
     // Initial render and dropdown population
     render(state.allEpisodes);
@@ -103,7 +141,7 @@ const search = (event) => {
 };
 
 // Dropdown function to filter episodes by selection
-function dropdownChange(event) {
+function episodeDropdownChange(event) {
   const selectedValue = event.target.value;
   if (selectedValue === "all") {
     render(state.allEpisodes);
@@ -132,6 +170,22 @@ function allEpisodesDropdown(allEpisodes) {
   });
 }
 
+
+// Populate the TV shows dropdown with fetched data
+function populateTvShowsDropdown(tvShows) {
+  tvShowSelect.innerHTML = ""; // Clear existing options
+  const option = document.createElement("option");
+  option.value = "all";
+  option.textContent = "All TV Shows";
+  tvShowSelect.appendChild(option);
+
+  tvShows.forEach(show => {
+    const option = document.createElement("option");
+    option.value = show.id;
+    option.textContent = show.name;
+    tvShowSelect.appendChild(option);
+  });
+}
 // Run the setup function when the page is loaded
 window.onload = setup;
 
