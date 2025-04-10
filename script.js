@@ -52,7 +52,7 @@ const tvShowDropDownContent = document.querySelector('#episodes-dropdown-content
 
  function setup() {
   fetchTvShows(); // async but doesn't need to be awaited here
-  // fetchEpisodes(tvShowId); // internally handles fetching, rendering, and dropdown
+  
   select.addEventListener("change", episodeDropdownChange);
   searchInput.addEventListener("keyup", search);
   tvShowSelect.addEventListener("change", tvShowDropDownChange);
@@ -140,8 +140,10 @@ const search = (event) => {
     );
   });
 
+  
+
   // Update the display with the filtered results
-  displayEpisodes(filteredEpisodes);
+  renderTvShow(filteredEpisodes); // Render all TV shows again
 };
 
 // Dropdown function to filter episodes by selection
@@ -196,7 +198,6 @@ function populateTvShowsDropdown(tvShows) {
 //TV Show Render function
 function renderTvShow(shows) {
   const container = document.getElementById("root");
-  container.innerHTML = "";
 
   const heading = document.createElement("h2");
   heading.textContent = `${shows.length} TV shows found`;
