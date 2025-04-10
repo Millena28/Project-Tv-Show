@@ -17,13 +17,50 @@ const fetchTvShows = async () => {
     const data = await response.json();
     state.allTvShows = data;
     populateTvShowsDropdown(state.allTvShows);
+    renderTvShow(state.allTvShows); // Render all TV shows initially
   } catch (error) {
     console.error("Error fetching TV shows:", error);
   }
 }
 
 
-function allTVShowsDropdown(allEpisodes) {
+
+let tvShowId = 0; // Initialize tvShowId variable
+// Fetch episodes from API
+async function fetchEpisodes(id) {
+  try {
+    const response = await fetch(`https://api.tvmaze.com/shows/${id}/episodes`);
+    if (!response.ok) {
+      throw new Error("Error: " + response.status + " - " + response.statusText);
+    }
+    const data = await response.json();
+    state.allEpisodes = data;
+    renderEpisodes(state.allEpisodes);
+    allEpisodesDropdown(state.allEpisodes);
+  } catch (error) {
+    console.error("Error fetching episodes:", error);
+  }
+}
+
+
+// Setup function to call fetch and renderEpisodes episodes
+const searchInput = document.getElementById("searchInput");
+const tvShowSelect = document.querySelector('#tv-show-dropdown');
+const select = document.getElementById("episodes-dropdown");
+const tvShowDropDownContent = document.querySelector('#episodes-dropdown-content');
+
+
+ function setup() {
+  fetchTvShows(); // async but doesn't need to be awaited here
+  // fetchEpisodes(tvShowId); // internally handles fetching, rendering, and dropdown
+  select.addEventListener("change", episodeDropdownChange);
+  searchInput.addEventListener("keyup", search);
+  tvShowSelect.addEventListener("change", tvShowDropDownChange);
+}
+
+
+// Populate the dropdown with all episodes
+function allEpisodesDropdown(allEpisodes) {
   const select = document.getElementById("episodes-dropdown");
   select.innerHTML = ""; // Clear the existing dropdown options
   
@@ -31,46 +68,13 @@ function allTVShowsDropdown(allEpisodes) {
   option.value = "all";
   option.textContent = "All Episodes";
   select.appendChild(option);
-
+  
   allEpisodes.forEach(episode => {
     const option = document.createElement("option");
     option.value = episode.id;
     option.textContent = `S${createEpisodeNumber(episode.season)}E${createEpisodeNumber(episode.number)} - ${episode.name}`;
     select.appendChild(option);
   });
-}
-let tvShowId="82"
-// Fetch episodes from API
-async function fetchEpisodes(id) {
-  const response = await fetch(`https://api.tvmaze.com/shows/${id}/episodes`);
-  if (!response.ok) {
-    throw new Error("Error: " + response.status + " - " + response.statusText);
-  }
-  return await response.json();
-}
-
-// Setup function to call fetch and renderEpisodes episodes
-const searchInput = document.getElementById("searchInput");
-const tvShowSelect = document.querySelector('#tv-show-dropdown');
-const select = document.getElementById("episodes-dropdown");
-async function setup() {
-  fetchTvShows();
-  try {
-    
-    // Add event listeners after episodes are loaded
-    select.addEventListener("change", episodeDropdownChange);
-    searchInput.addEventListener("keyup", search);
-    const episodes = await fetchEpisodes(tvShowId);
-    state.allEpisodes = episodes;
-  
-    // Initial renderEpisodes and dropdown population
-    renderEpisodes(state.allEpisodes);
-    allEpisodesDropdown(state.allEpisodes);
-    tvShowSelect.addEventListener("change", tvShowDropDownChange);
-
-  } catch (error) {
-    console.error("Error fetching episodes:", error);
-  }
 }
 
 // RenderEpisodes episodes on the page
@@ -86,17 +90,17 @@ function renderEpisodes(episodes) {
   episodes.forEach(episode => {
     const episodeCard = document.createElement("div");
     episodeCard.classList.add("episode-card");
-
+    
     const title = document.createElement("h3");
     title.textContent = `${episode.name} (S${createEpisodeNumber(episode.season)} E${createEpisodeNumber(episode.number)})`;
-
+    
     const image = document.createElement("img");
     image.src = episode.image?.medium;
     image.alt = episode.name;
 
     const summary = document.createElement("p");
     summary.innerHTML = episode.summary;
-
+    
     const link = document.createElement("a");
     link.href = episode.url;
     link.target = "_blank";
@@ -153,24 +157,6 @@ function episodeDropdownChange(event) {
 }
 
 
-// Populate the dropdown with all episodes
-function allEpisodesDropdown(allEpisodes) {
-  const select = document.getElementById("episodes-dropdown");
-  select.innerHTML = ""; // Clear the existing dropdown options
-  
-  const option = document.createElement("option");
-  option.value = "all";
-  option.textContent = "All Episodes";
-  select.appendChild(option);
-  
-  allEpisodes.forEach(episode => {
-    const option = document.createElement("option");
-    option.value = episode.id;
-    option.textContent = `S${createEpisodeNumber(episode.season)}E${createEpisodeNumber(episode.number)} - ${episode.name}`;
-    select.appendChild(option);
-  });
-}
-
 
 // Run the setup function when the page is loaded
 // Function to create a dropdown for all TV Shows
@@ -178,15 +164,16 @@ function allEpisodesDropdown(allEpisodes) {
   function tvShowDropDownChange(event) {
     const selectedValue = event.target.value;
     if (selectedValue === "all") {
-      
+      tvShowDropDownContent.style.display = "none"; // Hide the dropdown content
       renderTvShow(state.allTvShows);
-      console.log(state.allTvShows) 
     } else {
+      tvShowDropDownContent.style.display = "block"; // Show the dropdown content
       const selectedId = parseInt(selectedValue);
       const filteredTvShows = state.allTvShows.filter(show => show.id === selectedId);
       renderTvShow(filteredTvShows); 
      
       tvShowId = selectedValue;
+      fetchEpisodes(tvShowId); // Fetch episodes for the selected TV show
       
     }
   }

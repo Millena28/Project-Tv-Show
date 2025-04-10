@@ -93,3 +93,6 @@
   box-shadow: 0 0 20px 0 wheat;
   margin: 10px;
 }
+#episodes-dropdown-content{
+  display: none;
+}
