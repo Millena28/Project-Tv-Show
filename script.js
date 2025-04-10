@@ -139,11 +139,8 @@ const search = (event) => {
       episode.number.toString().includes(state.searchTerm)
     );
   });
-
-  
-
   // Update the display with the filtered results
-  renderTvShow(filteredEpisodes); // Render all TV shows again
+  renderEpisodes(filteredEpisodes); // Render all TV shows again
 };
 
 // Dropdown function to filter episodes by selection
@@ -198,7 +195,7 @@ function populateTvShowsDropdown(tvShows) {
 //TV Show Render function
 function renderTvShow(shows) {
   const container = document.getElementById("root");
-
+  container.innerHTML = ""; // Clear any previous content
   const heading = document.createElement("h2");
   heading.textContent = `${shows.length} TV shows found`;
   container.appendChild(heading);
