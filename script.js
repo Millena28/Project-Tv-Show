@@ -179,6 +179,7 @@ function episodeDropdownChange(event) {
 
 function populateTvShowsDropdown(tvShows) {
   tvShowSelect.innerHTML = ""; // Clear existing options
+  tvShows.sort((a, b) => a.name.localeCompare(b.name)); // Sort TV shows by name
   const option = document.createElement("option");
   option.value = "all";
   option.textContent = "All TV Shows";
