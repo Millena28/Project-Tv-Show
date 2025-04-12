@@ -47,7 +47,7 @@ async function fetchEpisodes(id) {
 const searchInput = document.getElementById("searchInput");
 const tvShowSelect = document.querySelector('#tv-show-dropdown');
 const select = document.getElementById("episodes-dropdown");
-const tvShowDropDownContent = document.querySelector('#episodes-dropdown-content');
+const episodeDropDownContent = document.querySelector('#episodes-dropdown-content');
 
 
  function setup() {
@@ -77,15 +77,18 @@ function allEpisodesDropdown(allEpisodes) {
   });
 }
 
+// Showing the show count in the nav bar
+const showCount = document.getElementById("show-count");
 // RenderEpisodes episodes on the page
 function renderEpisodes(episodes) {
   const container = document.getElementById("root");
   container.innerHTML = ""; // Clear any previous content
 
   // Episode count display
-  const episodeCount = document.createElement("h2");
-  episodeCount.textContent = howManyEpisodes(episodes);
-  container.appendChild(episodeCount);
+  // const episodeCount = document.createElement("h2");
+  // episodeCount.textContent = howManyEpisodes(episodes);
+  // container.appendChild(episodeCount);
+  showCount.textContent = howManyEpisodes(episodes); // Update the show count in the nav bar
 
   episodes.forEach(episode => {
     const episodeCard = document.createElement("div");
@@ -163,10 +166,10 @@ function episodeDropdownChange(event) {
   function tvShowDropDownChange(event) {
     const selectedValue = event.target.value;
     if (selectedValue === "all") {
-      tvShowDropDownContent.style.display = "none"; // Hide the dropdown content
+      episodeDropDownContent.style.display = "none"; // Hide the dropdown content
       renderTvShow(state.allTvShows);
     } else {
-      tvShowDropDownContent.style.display = "block"; // Show the dropdown content
+      episodeDropDownContent.style.display = "block"; // Show the dropdown content
       const selectedId = parseInt(selectedValue);
       const filteredTvShows = state.allTvShows.filter(show => show.id === selectedId);
       renderTvShow(filteredTvShows); 
@@ -197,10 +200,13 @@ function populateTvShowsDropdown(tvShows) {
 function renderTvShow(shows) {
   const container = document.getElementById("root");
   container.innerHTML = ""; // Clear any previous content
-  const heading = document.createElement("h2");
-  heading.textContent = `${shows.length} TV shows found`;
-  container.appendChild(heading);
+  // const heading = document.createElement("h2");
+  // heading.textContent = `${shows.length} TV shows found`;
+  // container.appendChild(heading);
+  //This line was causing the problem, you don't want the number of TV show found to append to your container, because you set a fixed width for the container, and when you add the heading, it will break the layout.
+  //In your html nav bar I created a div with ID "show-count" to show the number of TV shows found.
 
+  showCount.textContent = `${shows.length} TV shows found`;
   shows.forEach(show => {
     const showCard = document.createElement("div");
     showCard.classList.add("episode-card");
