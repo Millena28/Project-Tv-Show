@@ -93,3 +93,18 @@
   box-shadow: 0 0 20px 0 wheat;
   margin: 10px;
 }
+#episodes-dropdown-content{
+  display: none;
+}
+h2{
+  width: 100%;
+  
+}
+
+/* Style your show count here */
+#show-count{
+ color: white;
+}
+#nav-bar div{
+  padding: 10px 10px;
+}
