@@ -3,6 +3,7 @@ const state = {
   allEpisodes: [],
   searchTerm: "",
   allTvShows:[]
+ 
 };
 
 
@@ -22,9 +23,6 @@ const fetchTvShows = async () => {
     console.error("Error fetching TV shows:", error);
   }
 }
-
-
-
 let tvShowId = 0; // Initialize tvShowId variable
 // Fetch episodes from API
 async function fetchEpisodes(id) {
@@ -41,13 +39,32 @@ async function fetchEpisodes(id) {
     console.error("Error fetching episodes:", error);
   }
 }
+const episodeCache = {};
 
+async function handleShowClick(showID) {
+  backToShowButton.style.display = "block";
+  searchInput.style.display = "block";
+  tvShowSelect.style.display = "none";
+  select.style.display = "block";
 
-// Setup function to call fetch and renderEpisodes episodes
+  if (!episodeCache[showID]) {
+    await fetchEpisodes(showID);
+    episodeCache[showID] = [...state.allEpisodes];
+  } else {
+    state.allEpisodes = episodeCache[showID];
+    renderEpisodes(state.allEpisodes);
+    allEpisodesDropdown(state.allEpisodes);
+  }
+  }
+  
+// Setup function to call fetch and renderEpisodes episod
 const searchInput = document.getElementById("searchInput");
 const tvShowSelect = document.querySelector('#tv-show-dropdown');
 const select = document.getElementById("episodes-dropdown");
 const episodeDropDownContent = document.querySelector('#episodes-dropdown-content');
+const backToShowButton = document.getElementById("back-to-shows");
+const showSearchInput = document.getElementById("show-search");
+
 
 
  function setup() {
@@ -56,10 +73,32 @@ const episodeDropDownContent = document.querySelector('#episodes-dropdown-conten
   select.addEventListener("change", episodeDropdownChange);
   searchInput.addEventListener("keyup", search);
   tvShowSelect.addEventListener("change", tvShowDropDownChange);
+
+ 
+
+   backToShowButton.addEventListener("click", () => {
+     backToShowButton.style.display = "none";
+     searchInput.style.display = "block";
+     tvShowSelect.style.display = "block";
+     select.style.display = "none";
+     renderTvShow(state.allTvShows);
+ });
+
+ const showSearchInput = document.getElementById("show-search");
+ searchInput.addEventListener("input", () => {
+  const term = showSearchInput.value.toLowerCase().trim();
+  const filtered = state.allTvShows.filter(show => {
+    return (
+      show.name.toLowerCase().includes(term) ||
+      show.genre.join(", ").toLowerCase().includes(term) ||
+      show.summary.toLowerCase().includes(term)
+    );
+  })
+      renderTvShow(filtered)
+ });
 }
 
-
-// Populate the dropdown with all episodes
+ // Populate the dropdown with all episodes
 function allEpisodesDropdown(allEpisodes) {
   const select = document.getElementById("episodes-dropdown");
   select.innerHTML = ""; // Clear the existing dropdown options
@@ -213,20 +252,32 @@ function renderTvShow(shows) {
 
     const title = document.createElement("h3");
     title.textContent = show.name;
+    title.style.cursor = "pointer";
+    title.addEventListener("click", () => handleShowClick(show.id));
 
     const image = document.createElement("img");
     image.src = show.image?.medium || "";
     image.alt = show.name;
+    image.classList.add("show-image");
+    image.addEventListener("click", () => handleShowClick(show.id));
 
     const summary = document.createElement("p");
     summary.innerHTML = show.summary;
 
-    const link = document.createElement("a");
-    link.href = show.url;
-    link.target = "_blank";
-    link.textContent = "View on TVMaze";
+    const details = document.createElement("p");
+    details.innerHTML =`
+      <strong>Genres:</strong> ${show.genres.join(", ")}<br>
+      <strong>Status:</strong> ${show.status}<br>
+      <strong>Rating:</strong> ${show.rating.average || "N/A"}<br>
+      <strong>Runtime:</strong> ${show.runtime} min
+      `;
 
-    showCard.append(title, image, summary, link); 
+    // const link = document.createElement("a");
+    // link.href = show.url;
+    // link.target = "_blank";
+    // link.textContent = "View on TVMaze";
+
+    showCard.append(title, image, summary,details); 
     container.appendChild(showCard);
   });
 }
