@@ -42,10 +42,13 @@ async function fetchEpisodes(id) {
 const episodeCache = {};
 
 async function handleShowClick(showID) {
-  backToShowButton.style.display = "block";
+  backToShowButton.style.display = "inline-block";
   searchInput.style.display = "block";
-  tvShowSelect.style.display = "none";
-  select.style.display = "block";
+  showSearchInput.style.display = "none";
+  select.style.display = "block"
+  episodeDropDownContent.style.display = "block";
+  document.getElementById("tv-show-dropdown-content").style.display = "none";
+
 
   if (!episodeCache[showID]) {
     await fetchEpisodes(showID);
@@ -68,7 +71,8 @@ const showSearchInput = document.getElementById("show-search");
 
 
  function setup() {
-  fetchTvShows(); // async but doesn't need to be awaited here
+  fetchTvShows(); 
+  backToShowButton.classList.add("hidden"); // async but doesn't need to be awaited here
   
   select.addEventListener("change", episodeDropdownChange);
   searchInput.addEventListener("keyup", search);
@@ -77,9 +81,10 @@ const showSearchInput = document.getElementById("show-search");
  
 
    backToShowButton.addEventListener("click", () => {
-     backToShowButton.style.display = "none";
-     searchInput.style.display = "block";
-     tvShowSelect.style.display = "block";
+     backToShowButton.classList.add("hidden");
+     searchInput.style.display = "none";
+     showSearchInput.style.display = "block"
+    //  tvShowSelect.style.display = "block";
      select.style.display = "none";
      renderTvShow(state.allTvShows);
  });
@@ -96,6 +101,7 @@ const showSearchInput = document.getElementById("show-search");
   })
       renderTvShow(filtered)
  });
+ 
 }
 
  // Populate the dropdown with all episodes
@@ -205,7 +211,8 @@ function episodeDropdownChange(event) {
   function tvShowDropDownChange(event) {
     const selectedValue = event.target.value;
     if (selectedValue === "all") {
-      episodeDropDownContent.style.display = "none"; // Hide the dropdown content
+      episodeDropDownContent.style.display = "none";
+      backToShowButton.classList.add("hidden"); // Hide the dropdown content
       renderTvShow(state.allTvShows);
     } else {
       episodeDropDownContent.style.display = "block"; // Show the dropdown content
@@ -214,7 +221,7 @@ function episodeDropdownChange(event) {
       renderTvShow(filteredTvShows); 
      
       tvShowId = selectedValue;
-      fetchEpisodes(tvShowId); // Fetch episodes for the selected TV show
+      handleShowClick(tvShowId); // Fetch episodes for the selected TV show
       
     }
   }
@@ -237,8 +244,11 @@ function populateTvShowsDropdown(tvShows) {
 
 //TV Show Render function
 function renderTvShow(shows) {
+  backToShowButton.style.display = "none";
   const container = document.getElementById("root");
-  container.innerHTML = ""; // Clear any previous content
+  container.classList.add("column-layout");
+  container.innerHTML = "";
+  // Clear any previous content
   // const heading = document.createElement("h2");
   // heading.textContent = `${shows.length} TV shows found`;
   // container.appendChild(heading);
@@ -260,6 +270,8 @@ function renderTvShow(shows) {
     image.alt = show.name;
     image.classList.add("show-image");
     image.addEventListener("click", () => handleShowClick(show.id));
+    //added event listener to the image ,so when ever the user clicks on the image it wil directly take him 
+    // to the epiisode of that show page.
 
     const summary = document.createElement("p");
     summary.innerHTML = show.summary;

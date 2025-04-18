@@ -3,15 +3,16 @@
   <head><script type="text/javascript" src="/___vscode_livepreview_injected_script"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TV Show Project | My Name (My GitHub username)</title>
+    <title>TV Show Project | MILLENA MESFIN (Millena28)</title>
     <link href="style.css" rel="stylesheet" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
 
   <body>
-    <div id="nav-bar">
-      <button id="back-to-shows" style="display: none;">Back to All Shows</button>
-      <div id="show-count"></div>
+    <!-- <div id="nav-bar">
+       <div id="nav-left">
+       <button id="back-to-shows" type="button" class="hidden">Back to All Shows</button>
+       <div id="show-count"></div>
       <div id="dropdown">
         <div id="tv-show-dropdown-content">
           <label for="tv-show-dropdown">TV Show</label>
@@ -31,16 +32,36 @@
 
       </div>
     </div>
-    <div id="root">
-    </div>
-    <!-- <script type="module">
-      // This line is unnecessary as the function is already imported in the HTML file. Uncomment it if I want to use it again.
-      // import { getAllEpisodes } from "./episodes.js";
-    </script> -->
+    <div id="root"> -->
+      <div id="nav-bar">
+        <div id="nav-left">
+          <div id="dropdown">
+            <div id="tv-show-dropdown-content">
+              <label for="tv-show-dropdown">TV Show</label>
+              <select id="tv-show-dropdown"></select>
+            </div>
+            <div id="episodes-dropdown-content">
+              <label for="episodes-dropdown">Episodes</label>
+              <select id="episodes-dropdown"></select> 
+            </div>
+          </div>
+        </div>
+      
+        <div id="nav-center">
+          <input id="searchInput" type="text" placeholder="Search episodes" />
+          <input id="show-search" type="text" placeholder="Search TV shows" />
+        </div>
+      
+        <div id="nav-right">
+          <button id="back-to-shows" type="button" class="hidden">⬅️ Back to All Shows</button>
+          <div id="show-count"></div>
+        </div>
+      </div>
+      <div id="root"> 
+      </div>
+      
 
-
-    <!-- Loads YOUR javascript code -->
-   
+    
     <script src="script.js" defer ></script>
 
   </body>
