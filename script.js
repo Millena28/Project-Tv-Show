@@ -68,7 +68,8 @@ const episodeDropDownContent = document.querySelector('#episodes-dropdown-conten
 const backToShowButton = document.getElementById("back-to-shows");
 const showSearchInput = document.getElementById("show-search");
 
-
+searchInput.style.display = "none";
+episodeDropDownContent.style.display = "none";
 
  function setup() {
   fetchTvShows(); 
@@ -143,7 +144,7 @@ function renderEpisodes(episodes) {
     title.textContent = `${episode.name} (S${createEpisodeNumber(episode.season)} E${createEpisodeNumber(episode.number)})`;
     
     const image = document.createElement("img");
-    image.src = episode.image?.medium;
+    image.src = episode.image?.original || episode.image?.medium;
     image.alt = episode.name;
 
     const summary = document.createElement("p");
@@ -263,6 +264,7 @@ function renderTvShow(shows) {
     const title = document.createElement("h3");
     title.textContent = show.name;
     title.style.cursor = "pointer";
+    title.classList.add("show-title"); 
     title.addEventListener("click", () => handleShowClick(show.id));
 
     const image = document.createElement("img");
@@ -275,8 +277,10 @@ function renderTvShow(shows) {
 
     const summary = document.createElement("p");
     summary.innerHTML = show.summary;
+    summary.classList.add("show-summary"); 
 
     const details = document.createElement("p");
+    details.classList.add("show-details");
     details.innerHTML =`
       <strong>Genres:</strong> ${show.genres.join(", ")}<br>
       <strong>Status:</strong> ${show.status}<br>
@@ -288,8 +292,10 @@ function renderTvShow(shows) {
     // link.href = show.url;
     // link.target = "_blank";
     // link.textContent = "View on TVMaze";
-
-    showCard.append(title, image, summary,details); 
+    const showContent = document.createElement("div");
+    showContent.classList.add("show-content");
+    showContent.append(image, summary, details);
+    showCard.append(title, showContent); 
     container.appendChild(showCard);
   });
 }
